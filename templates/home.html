@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<meta charset="UTF-8">
+<style>
+  	.thumb img  {
+    border: 2px solid #55c5e9;
+    padding: 15px;
+    background: #666;
+    margin-right: 10px;
+    margin-bottom: 10px;
+   	}
+   	.rightpic {
+    float: right;
+   	}
+   	.pointer { cursor: pointer; }
+	.sign {
+	    float: left;
+	    padding: 7px;
+	    margin: 10px 0 5px 5px;
+	   }
+	   .sign figcaption {
+	    margin: 0 auto 5px;
+	   }
+  </style>
+<head>
+	<title>Галерея</title>
+</head>
+<body style="background-color:#FDF4E3">
+	{% for category in categories %}
+			<figure class="sign">
+			   <p><img src="/static/picture/{{category[0]}}" alt={{category[1]}} class=pointer width="200" height="200" onClick='location.href="https://store-yandex-lyceum.herokuapp.com/categories/{{category[1]}}"'>
+			   <figcaption>{{category[1]}} </figcaption>
+			 </figure>
+	{% endfor %}	
+</body>
+{% endblock %}

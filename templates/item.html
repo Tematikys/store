@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="UTF-8">
+<style>
+   .thumb img  {
+    border: 2px solid #55c5e9; 
+    padding: 15px;
+    background: #666;
+    margin-right: 10px;
+    margin-bottom: 10px;
+   }
+	.rightpic {
+    float: right; 
+    margin: 0 0 5px 5px;
+   }
+   .pointer { cursor: pointer; }
+	.sign {
+	    float: left; 
+	    padding: 7px; 
+	    margin: 10px 0 5px 5px;
+	   }
+	   .sign figcaption {
+	    margin: 0 auto 5px;
+	    
+
+	   }
+
+  </style>
+
+
+<body style="background-color:#FDF4E3">
+
+
+	<h1 align="center"> <strong> {{p}} </h1>
+	{% for item in items %}
+
+	 	{% if p == item[0] %}
+	 	<p><font size="5"><img src="/static/picture/{{item[3]}}" alt={{item[0]}} class="rightpic"> 
+		  {{item[4]}}</font></p> 
+		{% endif %}			
+
+		{% endfor %}
+		{% if current_user.is_authenticated %}
+
+			<a onClick='location.href="https://gallery-yandex.herokuapp.com/get/{{category}}/{{p}}"' class="btn btn-primary">добавить в корзину</a>
+		{% endif %}
+
+
+	
+</body>
+{% endblock %}
