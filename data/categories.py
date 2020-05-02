@@ -2,7 +2,7 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 
-# Создание таблицы Painters для хранения информации о художниках
+#создание тыблицы с категориями товаров
 
 class Category(SqlAlchemyBase):
     __tablename__ = 'Categories'

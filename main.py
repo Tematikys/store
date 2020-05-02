@@ -8,22 +8,19 @@ from wtforms.validators import DataRequired
 
 import sqlite3
 import io
-import maps
 import requests
 import lxml.etree
 import os
 
 
-#шаблон авторизации
-
+#авторизация
 class LoginForm(FlaskForm):
     email = StringField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
-#шаблон регистрации
-
+#регистрация
 class RegisterForm(FlaskForm):
     email = StringField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
@@ -32,13 +29,7 @@ class RegisterForm(FlaskForm):
     about = TextAreaField("Немного о себе")
     submit = SubmitField('Войти')
 
-
-
-
-
-
 #основной код
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
@@ -56,15 +47,6 @@ categories = []
 for category in categoriez:
     categories.append([category[2], category[1]])
 
-# Функция запуска
-def main():
-    
-    port = int(os.environ.get("PORT", 6000))
-    app.run(host='0.0.0.0', port=port)
-
-
-
-    
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
@@ -165,10 +147,7 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
-
-
-
-
 if __name__ == '__main__':
     db_session.global_init("db/1.db")
-    main()
+    port = int(os.environ.get("PORT", 6000))
+    app.run(host='0.0.0.0', port=port)

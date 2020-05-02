@@ -5,7 +5,7 @@ import sqlalchemy.orm
 import sqlalchemy
 import datetime
 
-# Создание твблицы users для хранения информации о пользователях
+#создание таблицы с данными о пользователях
 
 class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'users'
