@@ -3,7 +3,6 @@ import sqlalchemy
 from .db_session import SqlAlchemyBase
 
 #создание тыблицы с категориями товаров
-
 class Category(SqlAlchemyBase):
     __tablename__ = 'Categories'
 

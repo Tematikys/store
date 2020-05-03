@@ -1,4 +1,4 @@
-from data import db_session, users, cart
+from data import db_session, users, l
 
 from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -9,7 +9,6 @@ from wtforms.validators import DataRequired
 import sqlite3
 import io
 import requests
-import lxml.etree
 import os
 
 
@@ -42,7 +41,7 @@ categoriez = cur.execute("""SELECT * FROM Categories""").fetchall()
 itemz = cur.execute("""SELECT * FROM Items""").fetchall()
 items = dict()
 for category in categoriez:
-    items[category[1]] = cur.execute("""SELECT * FROM Items WHERE Category IN (SELECT id FROM Categories WHERE Name = ?)""", (category[1],)).fetchall()
+    items[category[1]] = cur.execute("""SELECT * FROM Items WHERE Category IN (SELECT id FROM Categories WHERE Name = ?)""", (category[1], )).fetchall()
 categories = []
 for category in categoriez:
     categories.append([category[2], category[1]])
@@ -62,7 +61,7 @@ def my():
     us = cur1.execute("""SELECT * FROM Users""").fetchall() 
     me = dict()
     for user in us:
-        me[user[0]] = cur1.execute("""SELECT * FROM Carts WHERE user_id = ?""", (user[0],)).fetchall()
+        me[user[0]] = cur1.execute("""SELECT * FROM Likes WHERE user_id = ?""", (user[0],)).fetchall()
     return render_template('my.html', items=itemz, me=me[current_user.id], categories=categoriez)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -77,26 +76,28 @@ def login():
         return render_template('login.html', message="Неправильный логин или пароль", form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
-@app.route('/get/<p>/<pic>',  methods=['GET', 'POST'])
-def get(p, pic):
+@app.route('/like/<p>/<pic>',  methods=['GET', 'POST'])
+def like(p, pic):
     session = db_session.create_session()
-    cart = session.query(cart.Cart).filter(cart.Cart.picture == pic, cart.Cart.user == current_user).first()
-    if not cart:
-        cart = cart.Cart()
-        cart.picture = pic
-        current_user.cart.append(cart)
+    likes = session.query(l.Likes).filter(l.Likes.picture == pic, l.Likes.user == current_user).first()
+    if not likes:
+        likes = l.Likes()
+        likes.picture = pic
+        current_user.likes.append(likes)
         session.merge(current_user)
         session.commit()
-    return redirect(f'/item/{p}/{pic}')
+    
+    
+    return redirect(f'/picture/{p}/{pic}')
 
-@app.route('/dell/<int:id>', methods=['GET', 'POST'])
+@app.route('/likes_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def dell(id):
+def likes_delete(id):
     session = db_session.create_session()
-    cart = session.query(cart.Cart).filter(Cart.Cart.id == id,
-                                      cart.Cart.user == current_user).first()
-    if cart:
-        session.delete(cart)
+    likes = session.query(l.Likes).filter(l.Likes.id == id,
+                                      l.Likes.user == current_user).first()
+    if likes:
+        session.delete(likes)
         session.commit()
     else:
         abort(404)
@@ -111,8 +112,7 @@ def logout():
 
 @app.route('/home')
 def home():
-    return render_template('home.html',
-                           categories=categoriez)
+    return render_template('home.html', categories=categoriez)
 
 @app.route('/category/<p>')
 def category(p):
@@ -124,18 +124,14 @@ def item(p, pic):
     return render_template('item.html', items=items[p], p=pic, category=p)
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Пароли не совпадают")
+            return render_template('register.html', title='Регистрация', form=form, message="Пароли не совпадают")
         session = db_session.create_session()
         if session.query(users.User).filter(users.User.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Такой пользователь уже есть")
+            return render_template('register.html', title='Регистрация', form=form, message="Такой пользователь уже есть")
         user = users.User(
             name=form.name.data,
             email=form.email.data,
@@ -149,5 +145,6 @@ def reqister():
 
 if __name__ == '__main__':
     db_session.global_init("db/1.db")
-    port = int(os.environ.get("PORT", 6000))
-    app.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get("PORT", 6000))
+    # app.run(host='127.0.0.0', port=6000)
+    app.run(port=8080, host='127.0.0.1', debug=True)

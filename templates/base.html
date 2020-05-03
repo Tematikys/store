@@ -1,8 +1,5 @@
 <!doctype html>
 <html lang="en">
-<style>
-    .pointer { cursor: pointer; }
-</style>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,22 +9,21 @@
         crossorigin="anonymous">
     <title>Магазин</title>
 </head>
-<body style="background-color:#FDF4E3">
-<header style="background-color:#FDF4E3">
-  <nav class="navbar navbar-light" style="background-color: #FDF4E3;">
-    <nav class="navbar navbar-light bg-faded">
-        <h1 onClick='location.href="https://store-yandex-lyceum.herokuapp.com/"' class="navbar-brand m-b-0 pointer"> <font face="Garamond"> <strong>Магазин</h1>
-    </nav>
-    {% if current_user.is_authenticated %}
-        <a class="navbar-brand">{{ current_user.name }}</a>
-        <a href="/my" class="btn btn-warning">Личный кабинет</a>
-        <a href="/logout" class="btn btn-danger">Выйти</a>
-    {% else %}
-        <p>
-            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-            <a class="btn btn-success" href="/login">Войти</a>
-        </p>
-    {% endif %}
+<body>
+<header>
+    <nav class="navbar navbar">
+        <a class="btn btn-dark" href="/home">Главная страница</a>
+        {% if current_user.is_authenticated %}
+            <h1 align="center" class="navbar"> <font face="Sans"></h1>
+            <a class="navbar-brand">{{ current_user.name }}</a>
+            <a href="/my" class="btn btn-warning">Личный кабинет</a>
+            <a href="/logout" class="btn btn-danger">Выйти</a>
+        {% else %}
+            <p>
+                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-success" href="/login">Войти</a>
+            </p>
+        {% endif %}
     </nav>
 </header>
 <!-- Begin page content -->
