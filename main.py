@@ -38,7 +38,7 @@ login_manager.init_app(app)
 #получение информации из бд
 connection = sqlite3.connect("db/1.db")
 cur = connection.cursor()
-categoriez = cur.execute("""SELECT * FROM Сategories""").fetchall()
+categoriez = cur.execute("""SELECT * FROM Categories""").fetchall()
 itemz = cur.execute("""SELECT * FROM Items""").fetchall()
 items = dict()
 for category in categoriez:
