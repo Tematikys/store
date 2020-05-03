@@ -110,17 +110,17 @@ def logout():
 
 
 @app.route('/home')
-def gallery():
+def home():
     return render_template('home.html',
                            categories=categoriez)
 
 @app.route('/category/<p>')
-def painter(p):
+def category(p):
     return render_template('category.html', items=items[p], p=p)
 
 
 @app.route('/item/<p>/<pic>')
-def picture(p, pic):
+def item(p, pic):
     return render_template('item.html', items=items[p], p=pic, category=p)
 
 @app.route('/register', methods=['GET', 'POST'])
