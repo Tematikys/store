@@ -6,7 +6,7 @@
 <head>
 	<title>Магазин</title>
 </head>
-<body style="background-color:#FDF4E3">
+<body>
 	<h1 align='center'>Личный кабинет</h1>
 	{% for picture in me %}
 		{% for item in items %}
@@ -14,7 +14,7 @@
 				{% for category in categories %}
 					{% if item[2] == category[0] %}
 					<figure class="sign">
-					   <p><img src="/static/picture/{{item[3]}}" alt={{item[0]}} class=pointer width="200" height="200" onClick='location.href="https://gallery-yandex.herokuapp.com/item/{{category[1]}}/{{picture[1]}}"'>
+					   <p><img src="/static/picture/{{item[2]}}" alt={{item[0]}} class=pointer width="200" height="200" onClick='location.href="https://127.0.0.1:8080/item/{{category[1]}}/{{picture[1]}}"'>
 					   <figcaption>{{picture[1]}} </figcaption>
 					    <a href="/likes_delete/{{ picture[0] }}" class="btn btn-danger">Удалить</a>
 					 </figure>

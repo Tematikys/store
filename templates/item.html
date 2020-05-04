@@ -12,7 +12,7 @@
 		{% endif %}			
 		{% endfor %}
 		{% if current_user.is_authenticated %}
-			<a onClick='location.href="https://127.0.0.1:8080/like/{{category}}/{{p}}"' class="btn btn-primary">добавить в корзину</a>
+			<a onClick='location.href="https://127.0.0.1:8080/add/{{category}}/{{p}}"' class="btn btn-primary">добавить в корзину</a>
 		{% endif %}
 </body>
 {% endblock %}
