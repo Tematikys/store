@@ -5,8 +5,8 @@
 <body>
 	{% for category in categories %}
 			<figure class="sign">
-			   	<img src="/static/picture/{{category[2]}}" class=pointer width="150" height="150">
-				<a class="btn" href="/category/{{category[1]}}"><strong>{{category[1]}}</a>
+			   	
+				<a class="btn" href="/category/{{category[1]}}"><img src="/static/picture/{{category[2]}}"><strong>{{category[1]}}</a>
 			   	<!-- <figcaption>{{category[1]}} </figcaption> -->
 			</figure>
 	{% endfor %}	

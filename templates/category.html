@@ -2,14 +2,11 @@
 
 
 {% block content %}
-<meta charset="UTF-8">
 <body>
 	<h1 align="center">{{p}} </h1>
 	{% for item in items %}
 		<figure class="sign">
-			<a class="btn btn" href="/item/{{p}}/{{item[0]}}">{{item[0]}}</a>
-			<!-- <p><img src="/static/picture/{{item[2]}}" alt={{item}} class=pointer width="200" height="200" onClick='location.href="127.0.0.1:8080/item/{{p}}/{{item[0]}}"'> -->
-			<!-- <figcaption>{{item[3]}} </figcaption> -->
+			<a class="btn btn" href="/item/{{p}}/{{item[0]}}"><img src="/static/picture/{{item[2]}}">{{item[0]}}</a>
 		</figure>
 	{% endfor %}
 </body>

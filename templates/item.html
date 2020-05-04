@@ -7,12 +7,18 @@
 	<h1 align="center"> <strong> {{p}} </h1>
 	{% for item in items %}
 	 	{% if p == item[0] %}
-	 	<p><font size="5"><img src="/static/picture/{{item[2]}}" alt={{item[0]}} class="rightpic"> 
-		  {{item[4]}}</font></p> 
+	 		<img src="/static/picture/{{item[2]}}">
+			<p>Характеристики: {{item[3]}}</p>
+			<p>Цена: {{item[4]}} ք</p>
+			{% if item[5] == 0 %}
+				<p>Нет в наличии</p>
+			{% elif current_user.is_authenticated %}
+				<p>В наличии: {{item[5]}}</p>
+				<a href="/add/{{category}}/{{p}}" class="btn btn-primary">добавить в корзину</a>
+			{% else %}
+				<p>В наличии: {{item[5]}}</p>
+			{% endif %}
 		{% endif %}			
-		{% endfor %}
-		{% if current_user.is_authenticated %}
-			<a onClick='location.href="https://127.0.0.1:8080/add/{{category}}/{{p}}"' class="btn btn-primary">добавить в корзину</a>
-		{% endif %}
+	{% endfor %}
 </body>
 {% endblock %}

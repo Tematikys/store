@@ -8,6 +8,7 @@ class Likes(SqlAlchemyBase):
     __tablename__ = 'likes'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    picture = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    item_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    count = sqlalchemy.Column(sqlalchemy.Integer)
     user = orm.relation('User')
