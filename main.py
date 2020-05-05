@@ -180,4 +180,4 @@ if __name__ == '__main__':
     db_session.global_init("db/1.db")
     # port = int(os.environ.get("PORT", 6000))
     # app.run(host='127.0.0.0', port=6000)
-    app.run(port=8080, host='127.0.0.1', debug=True)
+    app.run(port=6000, host='0.0.0.0', debug=True)
