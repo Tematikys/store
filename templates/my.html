@@ -4,23 +4,23 @@
 {% block content %}
 <body>
 	<h1 align='center'>Корзина</h1>
-	{% for picture in me %}
+	{% for i in me %}
 		{% for item in items %}
-			{% if picture[1] == item[0] %}
+			{% if i[1] == item[0] %}
 				{% for category in categories %}
 					{% if item[1] == category[0] %}
 						<figure class="sign">
-							<p><img src="/static/picture/{{item[2]}}" onClick='location.href="/item/{{category[1]}}/{{picture[1]}}"'>
-							<figcaption>{{picture[1]}}; {{picture[3]}} шт.</figcaption>
-					    	<a href="/delete/{{picture[1]}}/{{picture[3]}}" class="btn btn-danger">Удалить</a>
-					    	<a href="/dec/{{ picture[1] }}" class="btn btn-danger">Убрать 1 шт.</a>
-					    	<a href="/inc/{{ picture[1] }}" class="btn btn-danger">Добавить 1 шт.</a>
+							<p><img src="/static/picture/{{item[2]}}" onClick='location.href="/item/{{category[1]}}/{{i[1]}}"'>
+							<figcaption>{{i[1]}}; {{i[3]}} шт.</figcaption>
+					    	<a href="/delete/{{i[1]}}/{{i[3]}}" class="btn btn-danger">Удалить</a>
+					    	<a href="/dec/{{ i[1] }}" class="btn btn-danger">Убрать 1 шт.</a>
+					    	<a href="/inc/{{ i[1] }}" class="btn btn-danger">Добавить 1 шт.</a>
 						</figure>
 					{% endif %}
 				{% endfor %}
 			{% endif %}
 		{% endfor %}
 	{% endfor %}
-	Общая сумма: {{summ}}
+	<h3>Общая сумма: {{summ}}</h3>
 </body>
 {% endblock %}

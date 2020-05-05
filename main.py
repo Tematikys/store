@@ -43,6 +43,8 @@ cur = connection.cursor()
 categoriez = cur.execute("""SELECT * FROM Categories""").fetchall()
 itemz = cur.execute("""SELECT * FROM Items""").fetchall()
 
+
+# обновление информации о предметах
 items = dict()
 def reload_items():
     global items
@@ -51,8 +53,11 @@ def reload_items():
     for category in categoriez:
         items[category[1]] = cur.execute("""SELECT * FROM Items WHERE Category IN (SELECT id FROM Categories WHERE Name = ?)""", (category[1], )).fetchall()
 
+
 reload_items()
 
+
+# изменение кол-ва предметов в бд
 def inc_item(name, c):
     session = db_session.create_session()
     i = session.query(items_db.Item).filter(items_db.Item.name == name).first()
@@ -60,6 +65,8 @@ def inc_item(name, c):
         i.count += c
     session.commit()
 
+
+# изменение кол-ва предметов в корзине
 def inc_likes(name, c):
     session = db_session.create_session()
     likes = session.query(l.Likes).filter(l.Likes.item_name == name, l.Likes.user == current_user).first()
@@ -101,6 +108,7 @@ def root():
     return render_template('home.html', categories=categoriez)
 
 
+# личный кабинет
 @app.route('/my')
 def my():
     reload_items()
@@ -115,6 +123,7 @@ def my():
     return render_template('my.html', items=itemz, me=me[current_user.id], categories=categoriez, summ=f'{int(summ[0])} руб. {int((summ[0] - int(summ[0]))*100)} коп.')
 
 
+# авторизация
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -128,6 +137,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+# добавление в корзину
 @app.route('/add/<cat>/<name>',  methods=['GET', 'POST'])
 def add(cat, name):
     # session = db_session.create_session()
@@ -145,24 +155,31 @@ def add(cat, name):
     inc_likes(name, 1)
     return redirect(f'/item/{cat}/{name}')
 
+
+# уменьшение кол-ва предмета на 1 в корзине
 @app.route('/dec/<name>', methods=['GET', 'POST'])
 @login_required
 def dec(name):
     inc_likes(name, -1)
     return redirect('/my')
 
+
+# увеличение кол-ва предмета на 1 в корзине
 @app.route('/inc/<name>', methods=['GET', 'POST'])
 @login_required
 def inc(name):
     inc_likes(name, 1)
     return redirect('/my')
 
+
+# удаление предмета из корзины
 @app.route('/delete/<name>/<int:c>', methods=['GET', 'POST'])
 def delete(name, c):
     inc_likes(name, -c)
     return redirect('/my')
 
 
+# выход из аккаунта
 @app.route('/logout')
 @login_required
 def logout():
@@ -170,22 +187,26 @@ def logout():
     return redirect("/")
 
 
+# главная страница
 @app.route('/home')
 def home():
     return render_template('home.html', categories=categoriez)
 
 
+# страница категории
 @app.route('/category/<p>')
 def category(p):
     return render_template('category.html', items=items[p], p=p)
 
 
+# страница предмета
 @app.route('/item/<p>/<pic>')
 def item(p, pic):
     reload_items()
     return render_template('item.html', items=items[p], p=pic, category=p)
 
 
+# регистрация
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -211,8 +232,11 @@ if __name__ == '__main__':
     db_session.global_init("db/1.db")
 
     # heroku
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
+
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
 
     # локальный сервер
-    app.run(port=8080, host='127.0.0.1', debug=True)
+    
+    # app.run(port=8080, host='127.0.0.1', debug=True)
