@@ -60,6 +60,30 @@ def inc_item(name, c):
         i.count += c
     session.commit()
 
+def inc_likes(name, c):
+    session = db_session.create_session()
+    likes = session.query(l.Likes).filter(l.Likes.item_name == name, l.Likes.user == current_user).first()
+    if not likes:
+        if c<=0:
+            return
+        likes = l.Likes()
+        likes.item_name = name
+        likes.count = c
+        current_user.likes.append(likes)        
+        session.merge(current_user)
+        inc_item(name, -c)
+    elif -c >= likes.count:
+        connection_2 = sqlite3.connect("db/1.db")
+        cur_2 = connection_2.cursor()
+        n = cur_2.execute("""SELECT count, item_name FROM likes WHERE id = ?""", (likes.id, )).fetchone()
+        if n:
+            inc_item(n[1], n[0])
+        cur_2.execute("""DELETE FROM likes WHERE id = ?""", (likes.id, ))
+        connection_2.commit()
+    else:
+        likes.count += c   
+        inc_item(name, -c)
+    session.commit()
 
 categories = []
 for category in categoriez:
@@ -86,7 +110,9 @@ def my():
     me = dict()
     for user in us:
         me[user[0]] = cur1.execute("""SELECT * FROM Likes WHERE user_id = ?""", (user[0],)).fetchall()
-    return render_template('my.html', items=itemz, me=me[current_user.id], categories=categoriez)
+    summ = cur1.execute("""SELECT sum(likes.count * price) as summ FROM likes, Items WHERE user_id = ? and name = item_name""", (user[0],)).fetchone()
+    print(summ)
+    return render_template('my.html', items=itemz, me=me[current_user.id], categories=categoriez, summ=f'{int(summ[0])} руб. {int((summ[0] - int(summ[0]))*100)} коп.')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -102,33 +128,38 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route('/add/<p>/<pic>',  methods=['GET', 'POST'])
-def add(p, pic):
-    session = db_session.create_session()
-    likes = session.query(l.Likes).filter(l.Likes.item_name == pic, l.Likes.user == current_user).first()
-    if not likes:
-        likes = l.Likes()
-        likes.item_name = pic
-        likes.count = 1
-        current_user.likes.append(likes)        
-        session.merge(current_user)
-    else:
-        likes.count += 1    
-    session.commit()
-    inc_item(pic, -1)
-    return redirect(f'/item/{p}/{pic}')
+@app.route('/add/<cat>/<name>',  methods=['GET', 'POST'])
+def add(cat, name):
+    # session = db_session.create_session()
+    # likes = session.query(l.Likes).filter(l.Likes.item_name == pic, l.Likes.user == current_user).first()
+    # if not likes:
+    #     likes = l.Likes()
+    #     likes.item_name = pic
+    #     likes.count = 1
+    #     current_user.likes.append(likes)        
+    #     session.merge(current_user)
+    # else:
+    #     likes.count += 1    
+    # session.commit()
+    # inc_item(pic, -1)
+    inc_likes(name, 1)
+    return redirect(f'/item/{cat}/{name}')
 
-
-@app.route('/delete/<int:id>', methods=['GET', 'POST'])
+@app.route('/dec/<name>', methods=['GET', 'POST'])
 @login_required
-def delete(id):
-    connection_2 = sqlite3.connect("db/1.db")
-    cur_2 = connection_2.cursor()
-    n = cur_2.execute("""SELECT count, item_name FROM likes WHERE id = ?""", (id, )).fetchone()
-    if n:
-        inc_item(n[1], n[0])
-    cur_2.execute("""DELETE FROM likes WHERE id = ?""", (id, ))
-    connection_2.commit()
+def dec(name):
+    inc_likes(name, -1)
+    return redirect('/my')
+
+@app.route('/inc/<name>', methods=['GET', 'POST'])
+@login_required
+def inc(name):
+    inc_likes(name, 1)
+    return redirect('/my')
+
+@app.route('/delete/<name>/<int:c>', methods=['GET', 'POST'])
+def delete(name, c):
+    inc_likes(name, -c)
     return redirect('/my')
 
 
@@ -178,6 +209,10 @@ def register():
 
 if __name__ == '__main__':
     db_session.global_init("db/1.db")
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    # app.run(port=6000, host='0.0.0.0', debug=True)
+
+    # heroku
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
+
+    # локальный сервер
+    app.run(port=8080, host='127.0.0.1', debug=True)

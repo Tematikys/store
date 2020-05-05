@@ -12,12 +12,15 @@
 						<figure class="sign">
 							<p><img src="/static/picture/{{item[2]}}" onClick='location.href="/item/{{category[1]}}/{{picture[1]}}"'>
 							<figcaption>{{picture[1]}}; {{picture[3]}} шт.</figcaption>
-					    	<a href="/delete/{{ picture[0] }}" class="btn btn-danger">Удалить</a>
+					    	<a href="/delete/{{picture[1]}}/{{picture[3]}}" class="btn btn-danger">Удалить</a>
+					    	<a href="/dec/{{ picture[1] }}" class="btn btn-danger">Убрать 1 шт.</a>
+					    	<a href="/inc/{{ picture[1] }}" class="btn btn-danger">Добавить 1 шт.</a>
 						</figure>
 					{% endif %}
 				{% endfor %}
 			{% endif %}
 		{% endfor %}
 	{% endfor %}
+	Общая сумма: {{summ}}
 </body>
 {% endblock %}
