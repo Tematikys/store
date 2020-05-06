@@ -2,6 +2,22 @@
 
 
 {% block content %}
+<meta charset="UTF-8">
+<style>
+	.pointer { cursor: pointer; }
+	.thumb img  {
+		border: 1px solid #FFCC00;
+		background: #FFCC00; 
+		margin-top: 10px; 
+		margin-bottom: 10px;
+		margin-right: 10px; 
+		margin-left: 10px; 
+	}
+	.sign {
+		float: middle;
+		padding: 5px;
+	}
+</style>
 <body>
 	{% for category in categories %}
 			<figure class="sign">

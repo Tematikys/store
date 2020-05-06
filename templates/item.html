@@ -3,6 +3,21 @@
 
 {% block content %}
 <meta charset="UTF-8">
+<style>
+	.pointer { cursor: pointer; }
+	.thumb img  {
+		border: 1px solid #FFCC00;
+		background: #FFCC00; 
+		margin-top: 10px; 
+		margin-bottom: 10px;
+		margin-right: 10px; 
+		margin-left: 10px; 
+	}
+	.sign {
+		float: middle;
+		padding: 5px;
+	}
+</style>
 <body>
 	<h1 align="center"> <strong> {{p}} </h1>
 	{% for item in items %}
@@ -14,7 +29,7 @@
 				<p>Нет в наличии</p>
 			{% elif current_user.is_authenticated %}
 				<p>В наличии: {{item[5]}}</p>
-				<a href="/add/{{category}}/{{p}}" class="btn btn-primary">добавить в корзину</a>
+				<a href="/add/{{category}}/{{p}}" class="btn btn-success">добавить в корзину</a>
 			{% else %}
 				<p>В наличии: {{item[5]}}</p>
 			{% endif %}
