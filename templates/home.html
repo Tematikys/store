@@ -4,7 +4,6 @@
 {% block content %}
 <meta charset="UTF-8">
 <style>
-	.pointer { cursor: pointer; }
 	.thumb img  {
 		border: 1px solid #FFCC00;
 		background: #FFCC00; 
@@ -13,15 +12,24 @@
 		margin-right: 10px; 
 		margin-left: 10px; 
 	}
+	.pointer { cursor: pointer; }
 	.sign {
-		float: middle;
+		float: left;
 		padding: 5px;
 	}
+	.sign figcaption {
+	    margin: 0 auto 5px;
+	}
+	.rightpic {
+    	float: right;
+    }
 </style>
 <body>
 	{% for category in categories %}
 			<figure class="sign">
-				<a class="btn" href="/category/{{category[1]}}"><img src="/static/picture/{{category[2]}}" width="200" height="200"><h1>{{category[1]}}</h1></a>
+				<!-- <a class="btn" href="/category/{{category[1]}}"><img src="/static/picture/{{category[2]}}" width="200" height="200"><h1>{{category[1]}}</h1></a> -->
+				<p><img src="/static/picture/{{category[2]}}" alt={{category[1]}} class=pointer width="200" height="200" onClick='location.href="/category/{{category[1]}}"'>
+				<figcaption>{{category[1]}}</figcaption>
 			</figure>
 	{% endfor %}	
 </body>
